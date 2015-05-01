@@ -23,7 +23,7 @@ var log = scopes.svyLogManager.getLogger('com.servoy.bap.component.webview.test'
 /**
  * @type {Object}
  *
- * @properties={typeid:35,uuid:"AF6C4E66-911A-4FE7-B21C-7496AEE5C126",variableType:-4}
+ * @properties={typeid:35,uuid:"AD24CB6F-D38B-446E-B425-905F96910982",variableType:-4}
  */
 var webPanel
 
@@ -41,7 +41,7 @@ var url
  *
  * @private
  *
- * @properties={typeid:24,uuid:"2335A750-E4EC-4050-92D8-4FA60759D279"}
+ * @properties={typeid:24,uuid:"965DB26A-FD28-4C9F-AC5D-ED066A0FA2ED"}
  */
 function onLoad(event) {
 	webPanel = new scopes.svyJFXWebView.WebViewPanel(elements.tabless)
@@ -59,20 +59,25 @@ function onLoad(event) {
 function onAction(event) {
 	/** @type {RuntimeTextField} */
 	var el = event.getSource()
-	var urlToLoad = controller.getDataProviderValue(el.getDataProviderID())
-	var parsedUrl = scopes.svyNet.parseUrl(urlToLoad)
-	
-	//Tried to make the location bar Google search bar as well, but not yet working
-	application.output('URL to load: ' + parsedUrl.authority)
-	if (!parsedUrl.authority) {
+	var urlToLoad = utils.stringTrim(controller.getDataProviderValue(el.getDataProviderID()))
+	/* Rules to determine if it is a search string or a url:
+	 * - trim surrounding whitepsace
+	 * - contains text separated by ., no illegal characters and no whitespace before occurrence of ? > url
+	 * - else searchString
+	 */
+	if (!/^(([a-z0-9]+-?[a-z0-9]+\.?){2,63}){2,127}$/gmi.test(urlToLoad)) {
 		urlToLoad = 'https://www.google.com/search?q=' + urlToLoad.split(' ').join('+')
+	} else {
+		var parsedUrl = scopes.svyNet.parseUrl(urlToLoad)
+		
+		if (!parsedUrl.protocol) {
+			parsedUrl.protocol = 'http'
+			urlToLoad = parsedUrl.toString()
+		}
 	}
-	if (!parsedUrl.protocol) {
-		parsedUrl.protocol = 'http'
-		urlToLoad = parsedUrl.toString()
-	}
+	
 	controller.setDataProviderValue(el.getDataProviderID(), urlToLoad)
-	webPanel.load(parsedUrl.toString())
+	webPanel.load(urlToLoad)
 }
 
 /**
