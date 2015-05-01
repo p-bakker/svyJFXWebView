@@ -56,6 +56,7 @@ dataProviderID:"url",
 location:"90,5",
 name:"url",
 onActionMethodID:"9AFDD3A5-7E22-4811-8573-94654C013E56",
+selectOnEnter:true,
 size:"84,24",
 typeid:4,
 uuid:"E0098B34-0445-47F1-866A-E8A3C9466B51"
