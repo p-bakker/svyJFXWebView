@@ -45,6 +45,28 @@ var url
  */
 function onLoad(event) {
 	webPanel = new scopes.svyJFXWebView.WebViewPanel(elements.tabless)
+	webPanel.addEventListener(scopes.svyJFXWebView.WebViewPanel.EVENT_TYPES.STATUS_CHANGED, onStatusUpdate)
+	webPanel.addEventListener(scopes.svyJFXWebView.WebViewPanel.EVENT_TYPES.LOCATION_CHANGED, onLocationChange)
+}
+
+/**
+ * @private 
+ * @param text
+ *
+ * @properties={typeid:24,uuid:"8FED61D7-4F67-446D-8095-A782297681F1"}
+ */
+function onStatusUpdate(text) {
+	application.setStatusText(text)
+}
+
+/**
+ * @private 
+ * @param location
+ *
+ * @properties={typeid:24,uuid:"6CA7C272-3AC4-4DA0-8219-89BBEB2BF1AB"}
+ */
+function onLocationChange(location) {
+	url = location
 }
 
 /**
