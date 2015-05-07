@@ -1,3 +1,4 @@
+borderType:"EmptyBorder,0,0,0,0",
 encapsulation:60,
 items:[
 {
@@ -14,7 +15,7 @@ location:"189,5",
 onActionMethodID:"9B725094-68F3-45E3-B108-8A6350FD7C59",
 onDoubleClickMethodID:"-1",
 onRightClickMethodID:"-1",
-size:"23,20",
+size:"23,24",
 text:"F",
 typeid:7,
 uuid:"58CD9831-8699-4FD2-96C2-8EE7723A9D7E"
@@ -25,8 +26,10 @@ location:"33,43",
 onActionMethodID:"-1",
 onDoubleClickMethodID:"-1",
 onRightClickMethodID:"-1",
+showClick:false,
 size:"150,20",
 text:"If you can read this, transparency works!",
+transparent:true,
 typeid:7,
 uuid:"6AD3DFC1-2100-422D-9C2B-D4C8AB122A6D"
 },
@@ -52,11 +55,13 @@ typeid:16,
 uuid:"B57840D8-CEFF-4287-9B34-7DE42F86F6FA"
 },
 {
+borderType:"EmptyBorder,0,0,0,0",
 formIndex:1,
 location:"5,5",
 onActionMethodID:"A165781C-1DC1-44E0-942C-FFA18B8EC22D",
 onDoubleClickMethodID:"-1",
 onRightClickMethodID:"-1",
+size:"80,24",
 text:"Test",
 typeid:7,
 uuid:"DFD22A59-AF40-40F2-BE90-6A53A05674F8"
@@ -66,10 +71,11 @@ anchors:11,
 dataProviderID:"url",
 formIndex:2,
 location:"90,5",
+margin:"0,3,0,0",
 name:"url",
 onActionMethodID:"9AFDD3A5-7E22-4811-8573-94654C013E56",
 selectOnEnter:true,
-size:"84,24",
+size:"94,24",
 typeid:4,
 uuid:"E0098B34-0445-47F1-866A-E8A3C9466B51"
 }
