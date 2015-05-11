@@ -391,6 +391,10 @@ function setUpPanel() {
 					/** @type {Packages.netscape.javascript.JSObject} */
 					var window = webEngine.executeScript("window")
 					window.setMember('servoy', callBackClass)
+					/*
+					 * workaround for Java 8 bug calling the upcall method in the WebView with just one param: https://javafx-jira.kenai.com/browse/RT-36206
+					 */
+					webEngine.executeScript('window.servoy = {executeMethod : function() {var bridge = servoy; console.log(bridge);return function (name, args) {bridge.executeMethod(name, args||[]) } }()}')
 					
 					//TODO: properly add transparent background support when implemented, see https://javafx-jira.kenai.com/browse/RT-25004
 					//Accessing private .getPage() method through reflection, in order to be able to call the page.setBackgroundColor() method to make the WebView transparent
