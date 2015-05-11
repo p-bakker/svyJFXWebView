@@ -5,4 +5,8 @@ public abstract class WebPaneScriptBridge {
 	public abstract Object executeMethod(String upcallMethod);
 
 	public abstract Object executeMethod(String upcallMethod, Object args);
+	
+	public String toString() {
+		return "ServoyScriptingBridge";
+	}
 }
