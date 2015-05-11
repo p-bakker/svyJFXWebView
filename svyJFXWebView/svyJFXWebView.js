@@ -93,6 +93,7 @@ function WebViewPanel(container) {
 	container.addTab(forms[formName])
 
 	/**
+	 * @public
 	 * @param {String} url
 	 */
 	this.load = function(url) {
@@ -100,6 +101,7 @@ function WebViewPanel(container) {
 	}
 
 	/**
+	 * @public
 	 * @param {String} content
 	 * @param {String} [contentType]
 	 */
@@ -114,6 +116,7 @@ function WebViewPanel(container) {
 	 * <br>
 	 * Use with care: using this method can cause deadlocks if the script that is executed performs callbacks back to the Servoy scripting layer again using <i>servoy.executeMethod(...)</i><br>
 	 * <br>
+	 * @public
 	 * @param {String} script
 	 * @return {*}
 	 */
@@ -124,7 +127,9 @@ function WebViewPanel(container) {
 	/**
 	 * Executes the supplied script in the JavaFX WebView and returns immediately. This means that this method never returns a value<br>
 	 * <br>
-	 * If the return value of the executed script is required, use {@link #executeScriptAndWait} instead
+	 * If the return value of the executed script is required, use {@link #executeScriptAndWait} instead<br>
+	 * <br>
+	 * @public
 	 * @param {String} script
 	 * TODO: add optional callback parameter
 	 */
@@ -132,6 +137,9 @@ function WebViewPanel(container) {
 		forms[formName].executeScriptLater(script)
 	}
 
+	/**
+	 * Opens the FireBug Inspector in the WebView to inspect the dom, view the console etc.
+	 */
 	this.enableFirebug = function() {
 		forms[formName].enableFirebug()
 	}
