@@ -305,7 +305,7 @@ function testExecuteMethodWithArgs() {
 		jsunit.assertEquals(null, upcallArgs[1])
 		//Check for log entry about passing Window
 		jsunit.assertEquals(1, scopes.svyUnitTestUtils.logMessages.ApplicationOutputAppender.length)
-		var expectedLogMessage = ' WARN c.s.b.c.webview - Prevented passing non-JavaScript object to the Servoy scripting layer (value is replaced with null): [object DOMWindow]'
+		var expectedLogMessage = ' WARN c.s.b.c.webview - Prevented passing non-JavaScript object to the Servoy scripting layer (value is replaced with null): [object Window]'
 		jsunit.assertEquals(expectedLogMessage, scopes.svyUnitTestUtils.logMessages.ApplicationOutputAppender[0])
 	}
 }
