@@ -136,8 +136,12 @@ function setUpPanel() {
 		Scene = Packages.javafx.scene.Scene,
 		Runnable = java.lang.Runnable,
 		ChangeListener = Packages.javafx.beans.value.ChangeListener,
+		Callback = Packages.javafx.util.Callback,
+		EventHandler = Packages.javafx.event.EventHandler,
 		State = Packages.javafx.concurrent.Worker.State
 
+	const CALLBACK_PROTOCOL_URL_PREFIX = 'callback://'
+	
 	var latch = new java.util.concurrent.CountDownLatch(1)
 	//Setup the UI for the JFXWebViewPanel
 	Platform.runLater(new Runnable({
@@ -158,7 +162,7 @@ function setUpPanel() {
 				elements.webPanel.setScene(scene)
 
 				if (log.isTraceEnabled()) {
-					webEngine.setOnResized(new Packages.javafx.event.EventHandler({
+					webEngine.setOnResized(new EventHandler({
 						handle: function(evt){
 							log.trace('Webengine resized: ' + evt)
 						}
@@ -168,7 +172,7 @@ function setUpPanel() {
 				//Hook into WebEngine Debugging impl. to log exceptions that happen in the page loaded into the WebPane
 				//WebPane exposes messaging interface that sends messages back and forth according to the Webkit Remote Debugging Protocol: https://developers.google.com/chrome-developer-tools/docs/protocol/1.0/console
 				var lastMessage
-				var debuggerCallback = new Packages.javafx.util.Callback({
+				var debuggerCallback = new Callback({
 					call: function(message) {
 						/** @type {{method: String,
 						 * 		params: {
@@ -297,7 +301,7 @@ function setUpPanel() {
 					/*
 					 * Turns out that when deployed through Java WebStart, another implementation of the netscape.javascript.JSObject is used 
 					 * than in developer, where the .call() has a slightly different implementation:
-					 * One uses an Object[] second argument, the otehr uses varargs.
+					 * One uses an Object[] second argument, the other uses varargs.
 					 * 
 					 * This code checks that and stored the value in isJSObjectVarArgs which is later used to branch in code
 					 * 
@@ -309,7 +313,7 @@ function setUpPanel() {
 						isJSObjectVarArgs = false
 						var methods = o.getClass().getDeclaredMethods()
 						isJSObjectVarArgs = methods.some(function(val, idx, ar){
-							if (val.getName() == 'call') {
+							if (val.getName() === 'call') {
 								return val.isVarArgs()
 							}
 							return false
@@ -340,7 +344,7 @@ function setUpPanel() {
 					for (var i = 0, l = o.getMember('length'); i < l; i++) {
 						retval.push(unwrapJSObject(o.getSlot(i)))
 					}
-				} else if (o.eval("Object.prototype.toString.call(this)") == '[object Object]') { //Plain JavaScript Objects
+				} else if (o.eval("Object.prototype.toString.call(this)") === '[object Object]') { //Plain JavaScript Objects
 					retval = {}
 					/** @type {Packages.netscape.javascript.JSObject} */
 					var keys = o.eval("Object.keys(this)")
@@ -423,7 +427,7 @@ function setUpPanel() {
 					
 					switch (newState) {
 						case State.SCHEDULED:
-							if (webEngine.getLocation().indexOf('callback://') == 0) {
+							if (webEngine.getLocation().indexOf(CALLBACK_PROTOCOL_URL_PREFIX) === 0) {
 								var parsedUrl = scopes.svyNet.parseUrl(webEngine.getLocation())
 								callServoyMethod(parsedUrl.host, Object.getOwnPropertyNames(parsedUrl.queryKey).length != 0 ? parsedUrl.queryKey : null)
 								
@@ -476,9 +480,10 @@ function onLoad(event) {
  */
 function load(url) {
 	if (!webEngine) {
+		log.warn('Failed to load url, as webengine == null')
 		return;
 	}
-	webEngineReady = false //prevent {@link executeScript} execution
+	webEngineReady = false //prevent {@link executeScript(AndWait}} execution
 	Packages.javafx.application.Platform.runLater(new java.lang.Runnable({
 		run: function() {
 			log.debug('load executed')
@@ -502,7 +507,7 @@ function loadContent(content, contentType) {
 		log.warn('Failed to load content, as webengine == null')
 		return;
 	}
-	webEngineReady = false //prevent {@link executeScript} execution
+	webEngineReady = false //prevent {@link executeScript(AndWait} execution
 	Packages.javafx.application.Platform.runLater(new java.lang.Runnable({
 		run: function() {
 			log.debug('loadContent executed')
@@ -620,8 +625,7 @@ function executeScriptLater(code) {
  *
  * @properties={typeid:24,uuid:"E80ABEA1-01AE-41A0-84E5-C179F406ED2C"}
  */
-function getStringFromDocument(doc)
-{
+function getStringFromDocument(doc) {
 	//CHECKME; maybe better results? http://stackoverflow.com/questions/14273450/get-the-contents-from-the-webview-using-javafx
 	try
     {
