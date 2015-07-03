@@ -18,7 +18,7 @@
 /**
  * @properties={typeid:35,uuid:"29F09D57-7146-4F9C-92D8-C68C912BDC72",variableType:-4}
  */
-var log = scopes.svyLogManager.getLogger('com.servoy.bap.component.webview.test')
+var log = scopes.svyLogManager.getLogger('com.servoy.bap.components.webview.test')
 
 /**
  * @type {Object}
