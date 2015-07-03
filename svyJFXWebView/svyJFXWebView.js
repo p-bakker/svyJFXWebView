@@ -217,6 +217,18 @@ var init = (function() {
 			var dummyURLStreamHandlerInstance = dummyURLStreamHandlerClass.newInstance();
 			
 			clientPluginAccess.registerURLStreamHandler('callback', dummyURLStreamHandlerInstance);
+			
+			/*
+			 * Removing the com.sun.deploy.net.cookie.DeployCookieSelector that Java Web Start installs, 
+			 * since it causes cookies not to be set and thus they are not available in subsequent requests.
+			 * 
+			 * Due to this code, The JavaFX WebView installs its own CookieHandler which does work properly
+			 */
+			if (!application.isInDeveloper() && scopes.svySystem.isSmartClient()) {
+				//TODO test for runtime Client if there's a need for that
+				//TODO Unit Tests?
+				java.net.CookieHandler.setDefault(null)
+			}
 		}
 	}
 }())
